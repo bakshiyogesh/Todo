@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
 import { Typography } from "@mui/material";
+import Edit from "./edit";
 const TaskList=()=>{
     const[task,setTask]=useState([]);
     const[input,setInput]=useState('');
@@ -18,22 +22,11 @@ const TaskList=()=>{
     const inputAdd=(e)=>{
         e.preventDefault();
         console.log("e value",e.target);
-        // console.log("target value:",e.target.value);
-
         addTodo(input);
-        // setInput('');
     }
 
     const deleteItem=(e, id)=>{
-        // task.splice(id,1);
         console.log("------- todo id ", id);
-        // task.splice(id,1);
-        // console.log(task);   
-        // let dataSet = todoList.splice(id, 1);
-        // console.log('----- dataSet : ', dataSet)
-        // setTodoList(todoList);
-
-
         let updatedTODO = todoList.filter( (item, index) => index !== id )
         console.log("------- after delete : ", updatedTODO);
         setTodoList(updatedTODO);
@@ -41,7 +34,8 @@ const TaskList=()=>{
     }
     const editData=(event,id)=>{
        console.log(id);
-       todoList.filter((item,index)=>index===id);
+       const updateItem=todoList.filter((item,index)=>index===id);
+       console.log("updated",updateItem);
     }
 
     const handleSubmit = (event) => {
@@ -55,6 +49,7 @@ const TaskList=()=>{
         if(event.target.value!==''&&!undefined){
         setTodoList([...todoList, newTodo])
         }
+        event.target.reset();
     }
     return (
         <>
@@ -69,12 +64,15 @@ const TaskList=()=>{
 
             <hr/>
             <hr/>
+            <Box sx={{ flexGrow: 1 }}>
+             <Grid container spacing={1} sx={{mx:'auto'}} lg={4}>
                 <form onSubmit={handleSubmit}>
                     <Typography variant="h3">Todo Msg : </Typography><input type="text"/>
                     <Button type="submit" variant="contained" sx={{ mx:2}}>Add</Button>
                 </form>
-
+            </Grid>
                 <hr/>
+             <Grid>   
                 <ul>
                     {todoList?.map((Element, index) =>
                         <li key={index}>{Element.id}. {Element.subject} 
@@ -84,7 +82,9 @@ const TaskList=()=>{
                         }
                         
                 </ul>
+                </Grid>
+            </Box>    
         </>
-    )
-}
+        )
+        }
 export default TaskList;
