@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import TableContainer from '@mui/material/TableContainer';
 import { Typography } from "@mui/material";
+import Checkbox from '@mui/material/Checkbox';
 import Edit from "./edit";
 const TaskList=()=>{
     const[task,setTask]=useState([]);
     const[input,setInput]=useState('');
-
+    const[isEditing,setisEditing]=useState(false);
     const [todoList, setTodoList] = useState([]);
-
+    const [editId,seteditId]=useState();
+    const [isChecked,setIsChecked]=useState(false);
+    const [status,setStatus]=useState(false);
+    //Item add handler
     const addTodo=(text)=>{
         setTask(
             [...task,{ 
@@ -18,13 +26,13 @@ const TaskList=()=>{
             }]
         );
     }
-
+    
     const inputAdd=(e)=>{
         e.preventDefault();
         console.log("e value",e.target);
         addTodo(input);
     }
-
+    //Delete item Handler
     const deleteItem=(e, id)=>{
         console.log("------- todo id ", id);
         let updatedTODO = todoList.filter( (item, index) => index !== id )
@@ -32,59 +40,107 @@ const TaskList=()=>{
         setTodoList(updatedTODO);
 
     }
-    const editData=(event,id)=>{
-       console.log(id);
-       const updateItem=todoList.filter((item,index)=>index===id);
-       console.log("updated",updateItem);
-    }
 
+    //Edit data handler
+    const editData=(event,id)=>{
+       console.log("id:",id);
+       let updatedValue={
+        id:id,
+        subject:input
+       }
+       console.log("updated value:",updateValue);
+       const updateItem=todoList.filter((item,index)=>index===id);
+       console.log("updated",updateItem[0].subject);
+       console.log("object data passed",event);
+       setInput(event.subject);
+       setisEditing(true);
+       seteditId(id);
+    //    setisEditing(false);
+    //    setTodoList([...todoList,updatedValue])
+    //    setTodoList([todoList[id].subject=input])
+    }
+    
+    //Update handler which matches passed id to array id and then change it's content 
+
+   const updateValue=(e)=>{
+    e.preventDefault();
+    for(let i=0;i<todoList.length;i++){
+        if(todoList[i].id===editId){
+            todoList[i+1].subject=input;
+            // console.log("loop of todolist",todoList[i].subject);
+            break;
+        }
+    }
+    setInput('');
+    setisEditing(false);
+   }
+   // Submission Handler
     const handleSubmit = (event) => {
         event.preventDefault();
         let newTodo = {
             id: todoList.length + 1,
             subject: event.target[0].value
         }
-        console.log("---- newTodo : ", newTodo);
-        console.log("event.target.value",event);
-        if(event.target.value!==''&&!undefined){
-        setTodoList([...todoList, newTodo])
+        //console.log("---- newTodo : ", newTodo);
+        // console.log("event.target.value",event.target);
+        // console.log(newTodo.subject.length);
+        if(newTodo.subject.length!=""){
+        setTodoList([...todoList,newTodo])
         }
-        event.target.reset();
+        setInput('');
     }
     return (
         <>
-
-            {/* <input type="text" placeholder="Enter item for your todo list.." onChange={(e) => { e.preventDefault(); setInput(e.target.value) }} />
-            <button onClick={inputAdd} type="submit">Add</button>
-            <h2>Remaining task to be done</h2>
-            <ul>
-                {task.map((Element, index) =>
-                    <li key={index}>{Element.value}<button onClick={delete_item(index)}>Delete</button></li>)}
-            </ul> */}
-
             <hr/>
             <hr/>
-            <Box sx={{ flexGrow: 1 }}>
              <Grid container spacing={1} sx={{mx:'auto'}} lg={4}>
                 <form onSubmit={handleSubmit}>
-                    <Typography variant="h3">Todo Msg : </Typography><input type="text"/>
-                    <Button type="submit" variant="contained" sx={{ mx:2}}>Add</Button>
+                    <Typography variant="h3">Todo Msg : </Typography><input type="text" onChange={(e)=>setInput(e.target.value)} value={input}/>
+                    <Button type="submit"  sx={{ mx:2}}>{isEditing?<Button onClick={updateValue}>Update</Button>:<Button onClick={addTodo}>Add</Button>}</Button>
                 </form>
             </Grid>
                 <hr/>
-             <Grid>   
-                <ul>
-                    {todoList?.map((Element, index) =>
-                        <li key={index}>{Element.id}. {Element.subject} 
+             {/* <Grid container spacing={2}>   
+                <table>
+                    {todoList?.map((Element, index) =>(<Grid>
+                        <li key={index}>{Element.id}.{Element.subject}
+                        {/* <Grid item > }
+                        <Button variant="contained" color="warning" onClick={(e)=>editData(element,index)}>Edit</Button>
                         <Button type="submit" variant="contained" color="error" sx={{ mx:2,my:1}} onClick={(e) => deleteItem(e, index)}>Delete</Button>
-                        <Button variant="contained" color="warning" onClick={(e)=>editData(e,index)}>Edit</Button>
-                        </li>)
-                        }
+                        {/* </Grid> }
+                        </li></Grid>)
+                        )}
                         
-                </ul>
-                </Grid>
-            </Box>    
-        </>
+                </table>
+                </Grid>  */}
+        <TableContainer>
+         <Table sx={{ minWidth: 500 }} aria-label="simple table" size="small">
+           <TableHead sx={{fontSize:"2em"}}>
+            <TableRow>
+              <TableCell>Tasks</TableCell>
+              <TableCell align="center">Status</TableCell>
+              <TableCell align="center">Edit</TableCell>
+              <TableCell align='center'>Delete</TableCell>
+           </TableRow>
+          </TableHead>
+        <TableBody>
+          {todoList.map((element,index) => (
+            <TableRow key={element.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+              <TableCell component="th" scope="row"><input type="checkbox" onClick={(e)=>setStatus(!e.target.checked)}/>{element.id}.{element.subject}</TableCell>
+              <TableCell align="center">{status?'Done':'Pending'}</TableCell>
+              <TableCell align="center"><Button variant="contained" color="warning" onClick={(e)=>editData(element,index)}>Edit</Button></TableCell>
+              <TableCell align='center'><Button type="submit" variant="contained" color="error" sx={{ mx:2,my:1}} onClick={(e) => deleteItem(e, index)}>Delete</Button></TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table> 
+      </TableContainer>      
+                
+                
+                
+                
+                
+                </>
         )
         }
 export default TaskList;
