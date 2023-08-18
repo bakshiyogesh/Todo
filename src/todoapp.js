@@ -13,67 +13,40 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
 import Paper from '@mui/material/Paper';
+import { Checkbox } from '@mui/material';
+
+
 
 const TaskComponent=()=>{
-    const[task,setTask]=useState([]);
     const[input,setInput]=useState('');
     const[isEditing,setisEditing]=useState(false);
     const [todoList, setTodoList] = useState([]);
     const [editId,seteditId]=useState();
-    // const [isChecked,setIsChecked]=useState(false);
-    const [checkedState, setCheckedState] = useState(
-        new Array(todoList.length).fill(false)
-      );
-
-    const [status,setStatus]=useState(false);
-    //Item add handler
-    const addTodo=(text)=>{
-        setTask(
-            [...task,{ 
-                value:text 
-            }]
-        );
-    }
-    
-    const inputAdd=(e)=>{
-        e.preventDefault();
-        addTodo(input);
-    }
-    //Delete item Handler
     const deleteItem=(e, id)=>{
+        // filter -> splice()
         let updatedTODO = todoList.filter( (item, index) => index !== id )
         console.log("------- after delete : ", updatedTODO);
         setTodoList(updatedTODO);
 
     }
-    //Checkbox  handler
+
+        const [state, setState] = React.useState({
+            input: '',
+            isEditing: false,
+            todoList: [],
+            editId: 0,
+        })
+
+
      const checkboxHandler=(element)=>{
         console.log(element);
-      const updateCheckbox=checkedState.map((item,index)=>item===element?!item:item);
-      setCheckedState(updateCheckbox);
      }
-
-
-
-    //Edit data handler
-    const editData=(event,id)=>{
-       console.log("id:",id);
-       let updatedValue={
-        id:id,
-        subject:input
-       }
-       console.log("updated value:",updateValue);
+    const editData=(element,id)=>{
        const updateItem=todoList.filter((item,index)=>item.id===id);
-       console.log("updated",updateItem[0].subject);
-       console.log("object data passed",event);
-       setInput(event.subject);
+       setInput(element.subject);
        setisEditing(true);
-       seteditId(event.id);
-       console.log("id passed for edit data:",editId);
+       seteditId(element.id);
     }
-    
-    //Update handler which matches passed id to array id and then change it's content 
-
    const updateValue=(e)=>{
     e.preventDefault();
     for(let i=0;i<todoList.length;i++){
@@ -85,12 +58,12 @@ const TaskComponent=()=>{
     setInput('');
     setisEditing(false);
    }
-   // Submission Handler
-    const handleSubmit = (event) => {
+   const handleSubmit = (event) => {
         event.preventDefault();
         let newTodo = {
             id: todoList.length + 1,
-            subject: event.target[0].value  
+            subject: event.target[0].value,
+            status: true
         };
         if(input!==""){
         setTodoList([...todoList,newTodo])
@@ -122,8 +95,11 @@ const TaskComponent=()=>{
         <TableBody>
           {todoList.map((element,index) => (
             <TableRow key={element.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell component="th" scope="row"><input type="checkbox" onChange={(e)=>checkboxHandler(element.id)}/>{element.subject}</TableCell>
-              <TableCell align="center">{status?'Done':'Pending'}</TableCell>
+              <TableCell component="th" scope="row">
+                <Checkbox defaultChecked={element.status} onChange={() => console.log("----- ", element.id, ", TODO Subject : ", element.subject)} />
+                {element.subject}
+                </TableCell>
+              <TableCell align="center">{element.status?'Done':'Pending'}</TableCell>
               <TableCell align="center">
                 <Button variant="contained" color="warning" onClick={(e)=>editData(element,element.id)} endIcon={<BorderColorIcon/>}></Button>
                 <Button variant="contained" color="error" sx={{ mx:2,my:1}} onClick={(e) => deleteItem(e, index)} endIcon={<DeleteIcon/>}></Button>
