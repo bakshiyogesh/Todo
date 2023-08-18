@@ -8,8 +8,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableContainer from '@mui/material/TableContainer';
 import { Typography } from "@mui/material";
-import Checkbox from '@mui/material/Checkbox';
+// import Checkbox from '@mui/material/Checkbox';
+import BorderColorIcon from '@mui/icons-material/BorderColor';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import UpdateIcon from '@mui/icons-material/Update';
 import Edit from "./edit";
+import Paper from '@mui/material/Paper';
 const TaskList=()=>{
     const[task,setTask]=useState([]);
     const[input,setInput]=useState('');
@@ -79,7 +84,7 @@ const TaskList=()=>{
         event.preventDefault();
         let newTodo = {
             id: todoList.length + 1,
-            subject: event.target[0].value
+            subject: event.target[0].value  
         }
         //console.log("---- newTodo : ", newTodo);
         // console.log("event.target.value",event.target);
@@ -91,12 +96,15 @@ const TaskList=()=>{
     }
     return (
         <>
-            <hr/>
+            {/* <hr/> */}
             <hr/>
              <Grid container spacing={1} sx={{mx:'auto'}} lg={4}>
                 <form onSubmit={handleSubmit}>
-                    <Typography variant="h3">Todo Msg : </Typography><input type="text" onChange={(e)=>setInput(e.target.value)} value={input}/>
-                    <Button type="submit"  sx={{ mx:2}}>{isEditing?<Button onClick={updateValue}>Update</Button>:<Button onClick={addTodo}>Add</Button>}</Button>
+                    <Typography variant="h3" sx={{mx:1.7}}>Todo Msg : </Typography>
+                    <Grid item alignContent={"center"} sx={{m:2}}>
+                    <input type="text"  onChange={(e)=>setInput(e.target.value)} value={input}/>
+                    <Button type="submit" variant="outlined" size="small" sx={{ mx:2}}>{isEditing?<Button onClick={(e)=>updateValue(e)} size="small" endIcon={<UpdateIcon/>}>Update</Button>:<Button onClick={addTodo} size="small" endIcon={<AddIcon/>}>Add</Button>}</Button>
+                    </Grid>
                 </form>
             </Grid>
                 <hr/>
@@ -113,8 +121,8 @@ const TaskList=()=>{
                         
                 </table>
                 </Grid>  */}
-        <TableContainer>
-         <Table sx={{ minWidth: 500 }} aria-label="simple table" size="small">
+        <TableContainer component={Paper}>
+         <Table sx={{Width:500 }} aria-label="simple table" size="small">
            <TableHead sx={{fontSize:"2em"}}>
             <TableRow>
               <TableCell>Tasks</TableCell>
@@ -126,10 +134,10 @@ const TaskList=()=>{
         <TableBody>
           {todoList.map((element,index) => (
             <TableRow key={element.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell component="th" scope="row"><input type="checkbox" onClick={(e)=>setStatus(!e.target.checked)}/>{element.id}.{element.subject}</TableCell>
+              <TableCell component="th" scope="row"><input type="checkbox" onClick={(e)=>setStatus(e.target.checked)}/>{element.id}.{element.subject}</TableCell>
               <TableCell align="center">{status?'Done':'Pending'}</TableCell>
-              <TableCell align="center"><Button variant="contained" color="warning" onClick={(e)=>editData(element,index)}>Edit</Button></TableCell>
-              <TableCell align='center'><Button type="submit" variant="contained" color="error" sx={{ mx:2,my:1}} onClick={(e) => deleteItem(e, index)}>Delete</Button></TableCell>
+              <TableCell align="center"><Button variant="contained" color="warning" onClick={(e)=>editData(element,index)} endIcon={<BorderColorIcon/>}>Edit</Button></TableCell>
+              <TableCell align='center'><Button type="submit" variant="contained" color="error" sx={{ mx:2,my:1}} onClick={(e) => deleteItem(e, index)} endIcon={<DeleteIcon/>}>Delete</Button></TableCell>
             </TableRow>
           ))}
         </TableBody>
