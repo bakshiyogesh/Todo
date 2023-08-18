@@ -2,8 +2,8 @@ ul{
   list-style-type:none;
 }
 .root{
-  background:linear-gradient(#50DBB4);
+  background:linear-gradient(to left,#e66465, #9198e5);
 }
 body{
-  background:linear-gradient(to left,#e66465, #9198e5);;
+  background:linear-gradient(to left,#e66465, #9198e5);
 }
