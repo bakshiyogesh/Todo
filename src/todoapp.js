@@ -48,7 +48,8 @@ const TaskComponent=()=>{
     }
     //Checkbox  handler
      const checkboxHandler=(element)=>{
-      const updateCheckbox=checkedState.map((item,index)=>index===element?!item:item);
+        console.log(element);
+      const updateCheckbox=checkedState.map((item,index)=>item===element?!item:item);
       setCheckedState(updateCheckbox);
      }
 
@@ -100,7 +101,7 @@ const TaskComponent=()=>{
         <>
              <Grid container spacing={1} sx={{mx:'auto'}} lg={4}>
                 <form onSubmit={handleSubmit}>
-                    <Typography variant="h3" sx={{mx:1.7}}>Todo Msg : </Typography>
+                    <Typography variant="h3" sx={{mx:1.7}}>Todo Tasks: </Typography>
                     <Grid item alignContent={"center"} sx={{m:2}}>
                     <input type="text"  onChange={(e)=>setInput(e.target.value)} value={input}/>
                     <Button type="submit" variant="outlined" size="small" sx={{ mx:2}}>{isEditing?<Button onClick={(e)=>updateValue(e)} size="small" endIcon={<UpdateIcon/>}>Update</Button>:<Button  size="small" endIcon={<AddIcon/>}>ADD</Button>}</Button>
@@ -121,7 +122,7 @@ const TaskComponent=()=>{
         <TableBody>
           {todoList.map((element,index) => (
             <TableRow key={element.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell component="th" scope="row"><input type="checkbox" onClick={(e)=>checkboxHandler(index)}/>{element.subject}</TableCell>
+              <TableCell component="th" scope="row"><input type="checkbox" onChange={(e)=>checkboxHandler(element.id)}/>{element.subject}</TableCell>
               <TableCell align="center">{status?'Done':'Pending'}</TableCell>
               <TableCell align="center">
                 <Button variant="contained" color="warning" onClick={(e)=>editData(element,element.id)} endIcon={<BorderColorIcon/>}></Button>
