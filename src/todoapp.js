@@ -20,7 +20,10 @@ const TaskComponent=()=>{
     const[isEditing,setisEditing]=useState(false);
     const [todoList, setTodoList] = useState([]);
     const [editId,seteditId]=useState();
-    const [isChecked,setIsChecked]=useState(false);
+    // const [isChecked,setIsChecked]=useState(false);
+    const [checkedState, setCheckedState] = useState(
+        new Array(todoList.length).fill(false)
+      );
 
     const [status,setStatus]=useState(false);
     //Item add handler
@@ -34,17 +37,22 @@ const TaskComponent=()=>{
     
     const inputAdd=(e)=>{
         e.preventDefault();
-        console.log("e value",e.target);
         addTodo(input);
     }
     //Delete item Handler
     const deleteItem=(e, id)=>{
-        console.log("------- todo id ", id);
         let updatedTODO = todoList.filter( (item, index) => index !== id )
         console.log("------- after delete : ", updatedTODO);
         setTodoList(updatedTODO);
 
     }
+    //Checkbox  handler
+     const checkboxHandler=(element)=>{
+      const updateCheckbox=checkedState.map((item,index)=>index===element?!item:item);
+      setCheckedState(updateCheckbox);
+     }
+
+
 
     //Edit data handler
     const editData=(event,id)=>{
@@ -59,7 +67,8 @@ const TaskComponent=()=>{
        console.log("object data passed",event);
        setInput(event.subject);
        setisEditing(true);
-       seteditId(id);
+       seteditId(event.id);
+       console.log("id passed for edit data:",editId);
     }
     
     //Update handler which matches passed id to array id and then change it's content 
@@ -81,20 +90,12 @@ const TaskComponent=()=>{
         let newTodo = {
             id: todoList.length + 1,
             subject: event.target[0].value  
-        }
-        if(newTodo.subject.length!==""){
+        };
+        if(input!==""){
         setTodoList([...todoList,newTodo])
         }
         setInput('');
     }
-    console.log(task)
-    console.log(input);
-    console.log(editId);
-    console.log(isEditing);
-    console.log(todoList);
-    console.log(isChecked);
-    console.log(status);
-
     return (
         <>
              <Grid container spacing={1} sx={{mx:'auto'}} lg={4}>
@@ -102,7 +103,7 @@ const TaskComponent=()=>{
                     <Typography variant="h3" sx={{mx:1.7}}>Todo Msg : </Typography>
                     <Grid item alignContent={"center"} sx={{m:2}}>
                     <input type="text"  onChange={(e)=>setInput(e.target.value)} value={input}/>
-                    <Button type="submit" variant="outlined" size="small" sx={{ mx:2}}>{isEditing?<Button onClick={(e)=>updateValue(e)} size="small" endIcon={<UpdateIcon/>}>Update</Button>:<Button onClick={addTodo} size="small" endIcon={<AddIcon/>}>Add</Button>}</Button>
+                    <Button type="submit" variant="outlined" size="small" sx={{ mx:2}}>{isEditing?<Button onClick={(e)=>updateValue(e)} size="small" endIcon={<UpdateIcon/>}>Update</Button>:<Button  size="small" endIcon={<AddIcon/>}>ADD</Button>}</Button>
                     </Grid>
                 </form>
             </Grid>
@@ -120,10 +121,10 @@ const TaskComponent=()=>{
         <TableBody>
           {todoList.map((element,index) => (
             <TableRow key={element.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-              <TableCell component="th" scope="row"><input type="checkbox" onClick={(e)=>setStatus(e.target.checked)}/>{element.subject}</TableCell>
+              <TableCell component="th" scope="row"><input type="checkbox" onClick={(e)=>checkboxHandler(index)}/>{element.subject}</TableCell>
               <TableCell align="center">{status?'Done':'Pending'}</TableCell>
               <TableCell align="center">
-                <Button variant="contained" color="warning" onClick={(e)=>editData(element,index)} endIcon={<BorderColorIcon/>}></Button>
+                <Button variant="contained" color="warning" onClick={(e)=>editData(element,element.id)} endIcon={<BorderColorIcon/>}></Button>
                 <Button variant="contained" color="error" sx={{ mx:2,my:1}} onClick={(e) => deleteItem(e, index)} endIcon={<DeleteIcon/>}></Button>
                 </TableCell>
               <TableCell align="left"></TableCell>
