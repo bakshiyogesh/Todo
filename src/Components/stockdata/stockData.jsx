@@ -19,7 +19,10 @@ const StockData=()=>{
     setHovered(false);
   };
   const dispatch=useDispatch();
-//   const dataSelect=useSelector((state)=>state.stocks.stockValue);
+  const dataSelect=useSelector((state)=>state.stocks.stockValue);
+  console.log("dataSelecet",dataSelect.forEach((element) => {
+  element  
+  }));
     return(
     <>
     <Grid  sx={{display:'flex',flexDirection:'row',p:3}}>
@@ -33,7 +36,7 @@ const StockData=()=>{
       cursor: "default"
       }
   }} component={'div'}>
-            <Typography variant='p' key={item.id}>{item.name}<IconButton><FavoriteBorderIcon onClick={()=>dispatch(addStocks(item))}/><ShoppingCartIcon/></IconButton></Typography>
+            <Typography variant='p' key={item.id}>{item.name}<IconButton>{item.name===dataSelect.name?<FavoriteIcon onClick={()=>dispatch(addStocks(item))}/>:<FavoriteBorderIcon onClick={()=>dispatch(addStocks(item))}/>}<ShoppingCartIcon/></IconButton></Typography>
             </Grid>
             {}
             <Grid item>
@@ -50,7 +53,7 @@ const StockData=()=>{
             const color=item.stockValueChange.includes('-')?'red':'green';
             return(<>
             <Grid item sx={{py:2}}>
-            <Typography variant='p'>{item.stockPrice}</Typography>
+            <Typography variant='p'>₹{item.stockPrice}</Typography>
             </Grid>
             <Grid item>
             <Typography variant='p' sx={{color:color}}>{item.stockValueChange}</Typography>

@@ -2,9 +2,12 @@ import { useSelector, useDispatch } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Grid, Typography } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { removeStocks } from "../../app/slice/slice";
 const WacthList = () => {
   const watchListData = useSelector((state) => state.stocks.stockValue);
+
+
   const dispatch = useDispatch();
   console.log("watchlist",watchListData);
   return (
@@ -29,7 +32,8 @@ const WacthList = () => {
                   >
                     <Typography variant="p" key={item.id}>
                       {item.name}
-                      <IconButton onClick={() => dispatch(removeStocks(item))}>
+                      <IconButton >
+                        <FavoriteIcon onClick={() => dispatch(removeStocks(item))}/>
                         <ShoppingCartIcon />
                       </IconButton>
                     </Typography>
@@ -54,7 +58,7 @@ const WacthList = () => {
             const color=item.stockValueChange.includes('-')?'red':'green';
             return(<>
             <Grid item sx={{py:2}}>
-            <Typography variant='p'>{item.stockPrice}</Typography>
+            <Typography variant='p'>₹{item.stockPrice}</Typography>
             </Grid>
             <Grid item>
             <Typography variant='p' sx={{color:color}}>{item.stockValueChange}</Typography>

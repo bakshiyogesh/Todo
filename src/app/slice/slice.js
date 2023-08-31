@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { act } from "react-dom/test-utils";
 const initialState={
-    stockValue:[]
+    stockValue:[],
+    itemId:[],
 }
 export const stockSlice=createSlice({
     name:'stocks',
@@ -9,7 +10,8 @@ export const stockSlice=createSlice({
     reducers:{
         addStocks:(state,action)=>{
           state.stockValue.push(action.payload);
-        },
+          state.itemId.push(action.payload.id);
+    },
         removeStocks:(state,action)=>{
             const stockToFind=state.stockValue.findIndex((item)=>item.id===action.payload.id);
             console.log(stockToFind,state.stockValue);
