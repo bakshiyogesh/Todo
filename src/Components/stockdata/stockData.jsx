@@ -2,9 +2,12 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import dummyData from '../../dummyData/data.js';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Rating from '@mui/material/Rating';
 import IconButton from '@mui/material/IconButton';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import { addStocks } from '../../app/slice/slice.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 const StockData=()=>{
     const [hovered, setHovered] = React.useState(false);
 
@@ -16,6 +19,7 @@ const StockData=()=>{
     setHovered(false);
   };
   const dispatch=useDispatch();
+//   const dataSelect=useSelector((state)=>state.stocks.stockValue);
     return(
     <>
     <Grid  sx={{display:'flex',flexDirection:'row',p:3}}>
@@ -29,7 +33,7 @@ const StockData=()=>{
       cursor: "default"
       }
   }} component={'div'}>
-            <Typography variant='p' key={item.id}>{item.name}<IconButton onClick={()=>dispatch(addStocks(item))}><ShoppingCartIcon/></IconButton></Typography>
+            <Typography variant='p' key={item.id}>{item.name}<IconButton><FavoriteBorderIcon onClick={()=>dispatch(addStocks(item))}/><ShoppingCartIcon/></IconButton></Typography>
             </Grid>
             {}
             <Grid item>
