@@ -7,7 +7,6 @@ import { removeStocks } from "../../app/slice/slice";
 const WacthList = () => {
   const watchListData = useSelector((state) => state.stocks.stockValue);
 
-
   const dispatch = useDispatch();
   console.log("watchlist",watchListData);
   return (

@@ -1,19 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 const initialState={
     stockValue:[],
-    itemId:[],
+    itemName:[],
 }
 export const stockSlice=createSlice({
     name:'stocks',
     initialState,
     reducers:{
         addStocks:(state,action)=>{
-          state.stockValue.push(action.payload);
-          state.itemId.push(action.payload.id);
+            if(!state.itemName.includes(action.payload.name)){
+                state.stockValue.push(action.payload);
+                state.itemName.push(action.payload.name)
+            }
+            console.log("id same here",state.itemName.includes(action.payload.name));
     },
         removeStocks:(state,action)=>{
             const stockToFind=state.stockValue.findIndex((item)=>item.id===action.payload.id);
-            console.log(stockToFind,state.stockValue);
+            // console.log(stockToFind,state.stockValue);
             state.stockValue.splice(stockToFind,1);
         }
     }

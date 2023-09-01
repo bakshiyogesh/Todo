@@ -2,7 +2,6 @@ import React from 'react';
 import { Grid, Typography } from '@mui/material';
 import dummyData from '../../dummyData/data.js';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Rating from '@mui/material/Rating';
 import IconButton from '@mui/material/IconButton';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -20,7 +19,9 @@ const StockData=()=>{
   };
   const dispatch=useDispatch();
   const dataSelect=useSelector((state)=>state.stocks.stockValue);
-  console.log("dataSelecet",dataSelect);
+  const idSelect=useSelector((state)=>state.stocks.itemId);
+  // console.log("idSelect",idSelect)
+  // console.log("dataSelect",dataSelect);
     return(
     <>
     <Grid  sx={{display:'flex',flexDirection:'row',p:3}}>
@@ -28,13 +29,15 @@ const StockData=()=>{
     {
         
         dummyData.map((item)=>{
+          // console.log('id',item.id);
+          // console.log("compare",item.id===dataSelect)
             return(<>
             <Grid item sx={{py:1,width:'20vw',"&:hover": {
       backgroundColor: "transparent",
       cursor: "default"
       }
   }} component={'div'}>
-            <Typography variant='p' key={item.id}>{item.name}<IconButton>{item.name===dataSelect?<FavoriteIcon onClick={()=>dispatch(addStocks(item))}/>:<FavoriteBorderIcon onClick={()=>dispatch(addStocks(item))}/>}<ShoppingCartIcon/></IconButton></Typography>
+            <Typography variant='p' key={item.id}>{item.name}<IconButton>{item.name===dataSelect[item.id]?<FavoriteIcon onClick={()=>dispatch(addStocks(item))}/>:<FavoriteBorderIcon onClick={()=>dispatch(addStocks(item))}/>}<ShoppingCartIcon/></IconButton></Typography>
             </Grid>
             {}
             <Grid item>
