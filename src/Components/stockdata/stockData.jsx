@@ -34,9 +34,7 @@ const StockData=()=>{
       cursor: "default"
       }
   }} component={'div'}>
-            <Typography variant='p' key={item.id}>{item.name}<IconButton>{item.name===dataSelect.forEach((element) => {
-                
-            element.name})?<FavoriteIcon onClick={()=>dispatch(addStocks(item))}/>:<FavoriteBorderIcon onClick={()=>dispatch(addStocks(item))}/>}<ShoppingCartIcon/></IconButton></Typography>
+            <Typography variant='p' key={item.id}>{item.name}<IconButton>{item.name===dataSelect?<FavoriteIcon onClick={()=>dispatch(addStocks(item))}/>:<FavoriteBorderIcon onClick={()=>dispatch(addStocks(item))}/>}<ShoppingCartIcon/></IconButton></Typography>
             </Grid>
             {}
             <Grid item>
