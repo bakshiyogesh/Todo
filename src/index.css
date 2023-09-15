@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+input[type='text']{
+  width:10rem;
+  height:2rem;
+}
+.root{
+  background: linear-gradient(#50DBB4);
+}
